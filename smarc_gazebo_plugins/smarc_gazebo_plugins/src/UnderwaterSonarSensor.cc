@@ -537,8 +537,10 @@ bool UnderwaterSonarSensor::UpdateImpl(const bool /*_force*/)
 	// TODO: make these into proper parameters
 	double SL = 200.0; // source level
     double TS = double(intensity)*(0.5*M_PI-angle)/M_PI; // target strength, probably dir should be DI
-	double TL = 0.5*range; // transmission loss
-	double NL = 30; // noise level
+	double TL = 0.5*range; // transmission loss 
+	// double TL = 20*log10(range) + alpha*range; //alpha = abscoff dependent on ie freq (default alpha = 10 dB/km)
+	//double f = 3400000; //340 kHz
+	double NL = 30; // noise level // freq and sea state dependent 
 	double DI = 0.0; // directivity index 
     double SNR = fmax(SL - 2.0*TL - (NL-DI) + TS, 0.0); // active sonar equation
 
