@@ -13,6 +13,14 @@
 #include <message_filters/synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
 
+#include <cv.h>
+#include <highgui.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <stdio.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv/cv.hpp>
+
 using namespace std;
 
 class CombineWaterfallImageNode {
@@ -28,6 +36,7 @@ public:
     message_filters::Synchronizer<MySyncPolicy>* sync;
 
     string auv_namespace;
+    int count;
 
     CombineWaterfallImageNode()
     {
@@ -75,6 +84,17 @@ public:
         cv_bridge::CvImage img_bridge;
         img_bridge = cv_bridge::CvImage(header, sensor_msgs::image_encodings::MONO8, image);
         img_bridge.toImageMsg(img_msg); // from cv_bridge to sensor_msgs::Image
+
+        //lofu start
+        count ++;
+        string folderpath ("/home/louise/GazeboPict2/test_");
+        string pictnum = to_string(count);
+        string type (".png");
+        string filepath = folderpath + pictnum + type;
+        cv::imwrite(filepath,image);
+
+        //lofu end
+
         
         waterfall_pub.publish(img_msg); // ros::Publisher pub_img = node.advertise<sensor_msgs::Image>("topic", queuesize);
     }

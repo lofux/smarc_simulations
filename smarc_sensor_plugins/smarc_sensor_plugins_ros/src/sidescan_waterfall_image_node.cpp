@@ -11,7 +11,19 @@
 #include <cmath>
 #include <random>
 
+#include <cv.h>
+#include <highgui.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <stdio.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv/cv.hpp>
+
+
+
+using namespace cv;
 using namespace std;
+
 
 class WaterfallImageNode {
 
@@ -35,6 +47,7 @@ public:
     int width;
     bool angle_unknown;
     bool is_left;
+    int count;
 
     std::default_random_engine generator;
 
@@ -61,6 +74,9 @@ public:
         pn.param<bool>("angle_unknown", angle_unknown, true);
         pn.param<bool>("is_left", is_left, true);
         string side_name;
+        count = 1;
+
+
         if (is_left) {
             side_name = "left";
         }
@@ -154,6 +170,22 @@ public:
         header.stamp = ros::Time::now(); // time
         cv_bridge::CvImage img_bridge;
         img_bridge = cv_bridge::CvImage(header, sensor_msgs::image_encodings::MONO8, waterfall_image);
+
+        //lofu start
+        count ++;
+        //save cv image img_bridge to file (.png?)
+        string folderpath ("/home/louise/GazeboPict/test_");
+        string pictnum = to_string(count);
+        string type (".png");
+        string filepath = folderpath + pictnum + type;
+
+
+
+        //cv::imwrite("/home/louise/GazeboPict/test.png",waterfall_image);
+
+        cv::imwrite(filepath,waterfall_image);
+        //lofu end
+
         img_bridge.toImageMsg(img_msg); // from cv_bridge to sensor_msgs::Image
         
         waterfall_pub.publish(img_msg); // ros::Publisher pub_img = node.advertise<sensor_msgs::Image>("topic", queuesize);
