@@ -7,7 +7,7 @@ add_compile_options(-std=c++11)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS sensor_msgs smarc_gazebo_ros_plugins cv_bridge message_filters tf)
+find_package(catkin REQUIRED COMPONENTS sensor_msgs smarc_gazebo_ros_plugins cv_bridge message_filters tf laser_geometry)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -131,6 +131,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(sidescan_waterfall_image_node src/sidescan_waterfall_image_node.cpp)
 add_executable(combine_waterfalls_node src/combine_waterfalls_node.cpp)
+add_executable(laser2cloud_node src/laser2cloud.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +151,12 @@ target_link_libraries(sidescan_waterfall_image_node
 target_link_libraries(combine_waterfalls_node
   ${catkin_LIBRARIES}
 )
+
+
+target_link_libraries(laser2cloud_node
+  ${catkin_LIBRARIES}
+)
+
 
 #############
 ## Install ##
